@@ -1,0 +1,24 @@
+@import url('https://rsms.me/inter/inter.css');
+html { height: 100%; font-family: "Inter", sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: "Inter var", sans-serif; }
+}
+
+html, body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  height: 100%;
+  border: 3rem solid #b9b9b9;
+  padding: 1rem;
+  flex: 1;
+}
