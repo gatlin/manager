@@ -1,6 +1,6 @@
 {
   "name": "lit-robot-manager",
-  "version": "0.1.1",
+  "version": "0.1.2-pre",
   "description": "control lit components with robot state machines",
   "author": "gatlin@niltag.net",
   "license": "AGPL-3.0",
@@ -8,16 +8,14 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/index.d.ts",
-    "dist/index.js",
-    "dist/index.js.map"
+    "dist/"
   ],
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
     "format": "prettier --write \"index.ts\"",
     "lint": "eslint \"index.ts\" --fix",
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "npm run build",
     "example": "tsc -p tsconfig.example.json && concurrently -k -r \"tsc -p tsconfig.example.json --watch --preserveWatchOutput\" \"wds --node-resolve --watch\""
   },
   "dependencies": {
