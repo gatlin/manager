@@ -16,6 +16,7 @@
     "format": "prettier --write \"index.ts\"",
     "lint": "eslint \"index.ts\" --fix",
     "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "example": "tsc -p tsconfig.example.json && concurrently -k -r \"tsc -p tsconfig.example.json --watch --preserveWatchOutput\" \"wds --node-resolve --watch\""
   },
   "dependencies": {
