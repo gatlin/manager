@@ -43,7 +43,7 @@ To try out the example component, run:
 npm run example
 ```
 
-Then visit http://localhost:8000/demo in your [favorite browser][firefox].
+Then visit http://localhost:8000/ in your [favorite browser][firefox].
 
 Issues / Questions / Concerns
 ===
