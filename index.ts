@@ -3,9 +3,9 @@ import {
   ReactiveControllerHost
 } from "@lit/reactive-element";
 import { interpret } from "robot3";
-import { signal } from "torc";
+import { Signal } from "torc";
+import type { Continuation } from "torc";
 import type { SendEvent, Service, Machine } from "robot3";
-import type { Signal, Continuation } from "torc";
 
 class Manager<T> implements ReactiveController, Continuation<SendEvent> {
   private host: ReactiveControllerHost;
@@ -13,7 +13,7 @@ class Manager<T> implements ReactiveController, Continuation<SendEvent> {
 
   constructor(host: ReactiveControllerHost, machine: Machine) {
     (this.host = host).addController(this);
-    this.service = signal(
+    this.service = new Signal(
       interpret(machine, (newService: Service<Machine>) => {
         this.service.next(newService);
       })
