@@ -6,7 +6,7 @@
     "noEmitOnError": true,
     "lib": ["es2017", "dom"],
     "strict": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -20,6 +20,7 @@
   },
   "include": [ "index.ts" ],
   "exclude": [
-    "./dist/**/*"
+    "./dist/**/*",
+    "./node_modules/**/*"
   ]
 }

@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "lit": "^2.0.0-rc.2",
-    "robot3": "^0.2.19",
-    "torc": "github:gatlin/torc",
+    "robot3": "^0.2.21",
+    "torc": "github:gatlin/torc#f0c45684b716d0b5a6676fbb507fa10697203fa3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
