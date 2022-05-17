@@ -21,6 +21,7 @@
   "dependencies": {
     "lit": "^2.0.0-rc.2",
     "robot3": "^0.2.21",
+    "torc": "github:gatlin/torc#6718186",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
