@@ -1,6 +1,6 @@
 {
   "name": "lit-robot-manager",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "control lit components with robot state machines",
   "author": "gatlin@niltag.net",
   "license": "AGPL-3.0",

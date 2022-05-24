@@ -1,12 +1,19 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { createMachine, state, transition, reduce, guard } from "robot3";
+import {
+  createMachine,
+  state,
+  transition,
+  reduce,
+  guard,
+  immediate
+} from "robot3";
 import { Manager } from "./index.js";
 
 /**
  * The state data managed by the state machine.
  */
-type Context = { count: number };
+type Context = { count: number; active: boolean };
 
 /**
  * Runtime values used, but not manipulated, by the machine.
@@ -24,10 +31,23 @@ type Config = Readonly<{
 const layout = (cfg: Config) =>
   createMachine(
     {
-      idle: state(
+      init: state(
+        transition(
+          "activate",
+          "loop",
+          guard((ctx: Context): boolean => !ctx.active),
+          reduce(
+            (ctx: Context): Context => ({
+              ...ctx,
+              active: true
+            })
+          )
+        )
+      ),
+      loop: state(
         transition(
           "incr",
-          "idle",
+          "loop",
           reduce(
             (ctx: Context): Context => ({
               ...ctx,
@@ -38,7 +58,7 @@ const layout = (cfg: Config) =>
         ),
         transition(
           "decr",
-          "idle",
+          "loop",
           reduce(
             (ctx: Context): Context => ({
               ...ctx,
@@ -46,9 +66,18 @@ const layout = (cfg: Config) =>
             })
           ),
           guard((ctx: Context): boolean => ctx.count > cfg.min)
+        ),
+        transition(
+          "stop",
+          "halt",
+          reduce((ctx: Context) => ({
+            ...ctx,
+            active: false
+          })),
+          guard((ctx: Context): boolean => ctx.active)
         )
       ),
-      halt: state()
+      halt: state(immediate("init"))
     },
     (initialContext: Context) => ({ ...initialContext })
   );
@@ -63,29 +92,42 @@ class ExampleComponent extends LitElement {
 
   private manager = new Manager<Context>(
     this,
-    layout(this.exposeProperties<Config>("max", "min")),
+    layout(this.exposeProperties("max", "min")),
     {
-      count: 0
+      count: 0,
+      active: false
     }
   );
 
   render(): TemplateResult {
-    return html`
-      <h1>Counter</h1>
-      <p><strong>${this.manager.context.count}</strong></p>
-      <button type="button" @click=${() => this.manager.next("incr")}>
-        Increment
-      </button>
-      <button type="button" @click=${() => this.manager.next("decr")}>
-        Decrement
-      </button>
-      <p>
-        <small>
-          Maximum of <strong>${this.max}</strong>; minimum of
-          <strong>${this.min}</strong>.
-        </small>
-      </p>
-    `;
+    if (this.manager.context.active) {
+      return html`
+        <h1>Counter</h1>
+        <p><strong>${this.manager.context.count}</strong></p>
+        <button type="button" @click=${() => this.manager.next("incr")}>
+          Increment
+        </button>
+        <button type="button" @click=${() => this.manager.next("decr")}>
+          Decrement
+        </button>
+        <p>
+          <small>
+            Maximum of <strong>${this.max}</strong>; minimum of
+            <strong>${this.min}</strong>.
+          </small>
+        </p>
+        <button type="button" @click=${() => this.manager.next("stop")}>
+          De-activate
+        </button>
+      `;
+    }
+    else {
+      return html`
+        <button type="button" @click=${() => this.manager.next("activate")}>
+          Press to activate
+        </button>
+      `;
+    }
   }
 
   /**
