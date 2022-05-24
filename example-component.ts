@@ -77,7 +77,15 @@ const layout = (cfg: Config) =>
           guard((ctx: Context): boolean => ctx.active)
         )
       ),
-      halt: state(immediate("init"))
+      halt: state(
+        immediate(
+          "init",
+          reduce((ctx: Context): Context => ({
+            ...ctx,
+            count: 0
+          }))
+        )
+      )
     },
     (initialContext: Context) => ({ ...initialContext })
   );
@@ -92,7 +100,7 @@ class ExampleComponent extends LitElement {
 
   private manager = new Manager<Context>(
     this,
-    layout(this.exposeProperties("max", "min")),
+    layout(this),
     {
       count: 0,
       active: false
@@ -100,10 +108,11 @@ class ExampleComponent extends LitElement {
   );
 
   render(): TemplateResult {
-    if (this.manager.context.active) {
+    const { active, count } = this.manager.context;
+    if (active) {
       return html`
         <h1>Counter</h1>
-        <p><strong>${this.manager.context.count}</strong></p>
+        <p><strong>${count}</strong></p>
         <button type="button" @click=${() => this.manager.next("incr")}>
           Increment
         </button>
@@ -128,25 +137,6 @@ class ExampleComponent extends LitElement {
         </button>
       `;
     }
-  }
-
-  /**
-   * Expose specified component properties in a read-only object.
-   * @param keys - The keys to expose. Must be key of both the desired config
-   * object and the component itself out of simplicity and laziness.
-   * @typeParam TConfig - The shape of the configuration object.
-   * @returns - An object of read-only properties.
-   */
-  protected exposeProperties<TConfig>(
-    ...keys: (keyof TConfig & keyof this)[]
-  ): TConfig {
-    const config: Partial<TConfig> = {};
-    for (const key of keys) {
-      Object.defineProperty(config, key, {
-        get: () => this[key]
-      });
-    }
-    return config as TConfig;
   }
 
   static styles = css`

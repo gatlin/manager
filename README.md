@@ -37,7 +37,7 @@ npm run build
 demo
 ---
 
-To try out the example component, run:
+To try out the [example component][examplecomponent], run:
 
 ```shell
 npm run example
