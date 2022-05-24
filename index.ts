@@ -41,9 +41,11 @@ class Manager<TContext> implements ReactiveController, Continuation<SendEvent> {
     }
     // the documentation mentions this property; the Service type does not.
     if ("child" in this.service$.value) {
-      (this.service$.value as {
-        child: Service<Machine>;
-      } & Service<Machine>).child.send(event);
+      (
+        this.service$.value as {
+          child: Service<Machine>;
+        } & Service<Machine>
+      ).child.send(event);
     }
     else {
       this.service$.value.send(event);
