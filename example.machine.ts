@@ -8,10 +8,51 @@ import {
 } from "robot3";
 import type { Machine } from "robot3";
 
+// Configurable run-time values.
 type Config = Readonly<{ max: number; min: number }>;
+
+// The state managed by the machine.
 type Context = { count: number; active: boolean };
 
-// Constructs application state machine given configuration object.
+// Reducers: the functions which modify the machine state.
+// This approach allows the machine operations to be unit tested individually
+// while simplifying the machine definition (below).
+function activateReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    active: true
+  };
+}
+
+function incrementReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    count: ctx.count + 1
+  };
+}
+
+function decrementReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    count: ctx.count - 1
+  };
+}
+
+function deactivateReducer(ctx: Context) {
+  return {
+    ...ctx,
+    active: false
+  };
+}
+
+function resetReducer(ctx: Context) {
+  return {
+    ...ctx,
+    count: 0
+  };
+}
+
+// Constructs application state machine given configuration object. //
 const initializeMachine = (cfg: Config): Machine =>
   createMachine(
     {
@@ -20,61 +61,33 @@ const initializeMachine = (cfg: Config): Machine =>
           "activate",
           "loop",
           guard((ctx: Context): boolean => !ctx.active),
-          reduce(
-            (ctx: Context): Context => ({
-              ...ctx,
-              active: true
-            })
-          )
+          reduce(activateReducer)
         )
       ),
       loop: state(
         transition(
           "incr",
           "loop",
-          reduce(
-            (ctx: Context): Context => ({
-              ...ctx,
-              count: ctx.count + 1
-            })
-          ),
-          guard((ctx: Context): boolean => ctx.count < cfg.max)
+          guard((ctx: Context): boolean => ctx.count < cfg.max),
+          reduce(incrementReducer)
         ),
         transition(
           "decr",
           "loop",
-          reduce(
-            (ctx: Context): Context => ({
-              ...ctx,
-              count: ctx.count - 1
-            })
-          ),
-          guard((ctx: Context): boolean => ctx.count > cfg.min)
+          guard((ctx: Context): boolean => ctx.count > cfg.min),
+          reduce(decrementReducer)
         ),
         transition(
           "stop",
           "halt",
-          reduce((ctx: Context) => ({
-            ...ctx,
-            active: false
-          })),
-          guard((ctx: Context): boolean => ctx.active)
+          guard((ctx: Context): boolean => ctx.active),
+          reduce(deactivateReducer)
         )
       ),
-      halt: state(
-        immediate(
-          "init",
-          reduce(
-            (ctx: Context): Context => ({
-              ...ctx,
-              count: 0
-            })
-          )
-        )
-      )
+      halt: state(immediate("init", reduce(resetReducer)))
     },
     (initialContext: Context) => ({ ...initialContext })
   );
-  
-  export { initializeMachine };
-  export type { Context, Config };
+
+export { initializeMachine };
+export type { Context, Config };

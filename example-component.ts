@@ -12,10 +12,21 @@ class ExampleComponent extends LitElement {
   @property()
   min = 0;
 
-  private manager = new Manager<Context>(this, initializeMachine(this), {
-    count: 0,
-    active: false
-  });
+  private manager = new Manager<Context>(
+    this,
+    initializeMachine(
+      // Configuration values which are immutable wrt the state machine.
+      Object.defineProperties(Object(), {
+        max: { get: () => this.max },
+        min: { get: () => this.min }
+      })
+    ),
+    // Initial state object.
+    {
+      count: 0,
+      active: false
+    }
+  );
 
   render(): TemplateResult {
     const { active, count } = this.manager.context;
@@ -24,10 +35,10 @@ class ExampleComponent extends LitElement {
         <h1>Counter</h1>
         <p><strong>${count}</strong></p>
         <button type="button" @click=${() => this.manager.next("incr")}>
-          Increment
+          Increment (+1)
         </button>
         <button type="button" @click=${() => this.manager.next("decr")}>
-          Decrement
+          Decrement (-1)
         </button>
         <p>
           <small>
