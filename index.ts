@@ -8,15 +8,22 @@ import type { Continuation } from "torc";
 import type { SendEvent, Service, Machine } from "robot3";
 
 class Manager<T> implements ReactiveController, Continuation<SendEvent> {
-  private host: ReactiveControllerHost;
   protected service: Signal<Service<Machine>>;
 
-  constructor(host: ReactiveControllerHost, machine: Machine) {
-    (this.host = host).addController(this);
+  constructor(
+    private host: ReactiveControllerHost,
+    machine: Machine,
+    initialContext?: T
+  ) {
+    this.host.addController(this);
     this.service = new Signal(
-      interpret(machine, (newService: Service<Machine>) => {
-        this.service.next(newService);
-      })
+      interpret(
+        machine as Machine,
+        (newService: Service<Machine>) => {
+          this.service.next(newService);
+        },
+        initialContext
+      )
     );
   }
 
@@ -34,19 +41,18 @@ class Manager<T> implements ReactiveController, Continuation<SendEvent> {
     }
     // the documentation mentions this property; the Service type does not.
     if ("child" in this.service.value) {
-      (
-        this.service.value as {
-          child: Service<Machine>;
-        } & Service<Machine>
-      ).child.send(event);
-    } else {
+      (this.service.value as {
+        child: Service<Machine>;
+      } & Service<Machine>).child.send(event);
+    }
+    else {
       this.service.value.send(event);
     }
   }
 
   public hostConnected() {
     if (!this.service.done) {
-      this.service.subscribe({ next: () => this.host.requestUpdate() });
+      this.service.subscribe(() => void this.host.requestUpdate());
     }
   }
 

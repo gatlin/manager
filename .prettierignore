@@ -1,2 +1,4 @@
 dist
-example-component.*
+coverage
+node_modules
+

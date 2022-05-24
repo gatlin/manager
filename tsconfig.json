@@ -18,7 +18,7 @@
     "incremental": true,
     "baseUrl": "."
   },
-  "include": [ "index.ts" ],
+  "include": [ "index.ts", "example-component.ts" ],
   "exclude": [
     "./dist/**/*",
     "./node_modules/**/*"

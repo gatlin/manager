@@ -1,4 +1,6 @@
 {
-  "trailingComma": "none",
-  "quoteProps": "consistent"
+  trailingComma: "none",
+  offsetTernaryExpressions: true,
+  breakBeforeElse: true,
+  printWidth: 80
 }
