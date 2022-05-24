@@ -11,11 +11,11 @@ import {
 } from "robot3";
 import { Manager } from "./index.js";
 
-type Config = Readonly<{ max: number; min: number; }>;
-type Context = { count: number; active: boolean; cfg?: Config };
+type Config = Readonly<{ max: number; min: number }>;
+type Context = { count: number; active: boolean };
 
 // Constructs application state machine given configuration object.
-const layoutMachine = (cfg: Config): Machine =>
+const initializeMachine = (cfg: Config): Machine =>
   createMachine(
     {
       init: state(
@@ -67,10 +67,12 @@ const layoutMachine = (cfg: Config): Machine =>
       halt: state(
         immediate(
           "init",
-          reduce((ctx: Context): Context => ({
-            ...ctx,
-            count: 0
-          }))
+          reduce(
+            (ctx: Context): Context => ({
+              ...ctx,
+              count: 0
+            })
+          )
         )
       )
     },
@@ -85,14 +87,10 @@ class ExampleComponent extends LitElement {
   @property()
   min = 0;
 
-  private manager = new Manager<Context>(
-    this,
-    layoutMachine(this),
-    {
-      count: 0,
-      active: false
-    }
-  );
+  private manager = new Manager<Context>(this, initializeMachine(this), {
+    count: 0,
+    active: false
+  });
 
   render(): TemplateResult {
     const { active, count } = this.manager.context;
