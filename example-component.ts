@@ -6,29 +6,16 @@ import {
   transition,
   reduce,
   guard,
-  immediate
+  immediate,
+  Machine
 } from "robot3";
 import { Manager } from "./index.js";
 
-/**
- * The state data managed by the state machine.
- */
-type Context = { count: number; active: boolean };
+type Config = Readonly<{ max: number; min: number; }>;
+type Context = { count: number; active: boolean; cfg?: Config };
 
-/**
- * Runtime values used, but not manipulated, by the machine.
- */
-type Config = Readonly<{
-  max: number;
-  min: number;
-}>;
-
-/**
- * Application state machine layout.
- * @param cfg - Configuration values.
- * @returns - A robot {@link Machine | finite state machine}.
- */
-const layout = (cfg: Config) =>
+// Constructs application state machine given configuration object.
+const layoutMachine = (cfg: Config): Machine =>
   createMachine(
     {
       init: state(
@@ -100,7 +87,7 @@ class ExampleComponent extends LitElement {
 
   private manager = new Manager<Context>(
     this,
-    layout(this),
+    layoutMachine(this),
     {
       count: 0,
       active: false
