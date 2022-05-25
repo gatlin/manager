@@ -1,6 +1,6 @@
 {
   "name": "lit-robot-manager",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "control lit components with robot state machines",
   "author": "gatlin@niltag.net",
   "license": "AGPL-3.0",
@@ -19,7 +19,7 @@
     "example": "tsc -p tsconfig.example.json && concurrently -k -r \"tsc -p tsconfig.example.json --watch --preserveWatchOutput\" \"wds --node-resolve --watch\""
   },
   "dependencies": {
-    "lit": "^2.0.0-rc.2",
+    "lit": "^2.2.4",
     "robot3": "^0.2.21",
     "torc": "github:gatlin/torc#6718186",
     "tslib": "^2.3.0"

@@ -47,10 +47,10 @@ class ExampleComponent extends LitElement {
         <h1>Counter</h1>
         <p><strong>${count}</strong></p>
         <button type="button" @click=${() => this.manager.next("incr")}>
-          Increment (+1)
+          (+1)
         </button>
         <button type="button" @click=${() => this.manager.next("decr")}>
-          Decrement (-1)
+          (-1)
         </button>
         <p>
           <small>
