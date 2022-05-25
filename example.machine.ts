@@ -1,3 +1,6 @@
+/**
+ * Example of how to structure a Manager state machine + related definitions.
+ */
 import {
   createMachine,
   state,
@@ -8,53 +11,23 @@ import {
 } from "robot3";
 import type { Machine } from "robot3";
 
-// Configurable run-time values.
+/**
+ * Parameters which inform application behavior which are not (directly)
+ * mutable from within the machine.
+ */
 type Config = Readonly<{ max: number; min: number }>;
 
-// The state managed by the machine.
+/**
+ * Application state managed by the machine.
+ */
 type Context = { count: number; active: boolean };
 
-// Reducers: the functions which modify the machine state.
-// This approach allows the machine operations to be unit tested individually
-// while simplifying the machine definition (below).
-function activateReducer(ctx: Context): Context {
-  return {
-    ...ctx,
-    active: true
-  };
-}
-
-function incrementReducer(ctx: Context): Context {
-  return {
-    ...ctx,
-    count: ctx.count + 1
-  };
-}
-
-function decrementReducer(ctx: Context): Context {
-  return {
-    ...ctx,
-    count: ctx.count - 1
-  };
-}
-
-function deactivateReducer(ctx: Context) {
-  return {
-    ...ctx,
-    active: false
-  };
-}
-
-function resetReducer(ctx: Context) {
-  return {
-    ...ctx,
-    count: 0
-  };
-}
-
-// Constructs application state machine given configuration object. //
-const initializeMachine = (cfg: Config): Machine =>
-  createMachine(
+/**
+ * @param cfg - {@link Config | Configuration object}.
+ * @returns - A robot finite state machine.
+ */
+function initializeMachine(cfg: Config): Machine {
+  return createMachine(
     {
       init: state(
         transition(
@@ -88,6 +61,55 @@ const initializeMachine = (cfg: Config): Machine =>
     },
     (initialContext: Context) => ({ ...initialContext })
   );
+}
 
-export { initializeMachine };
+/*
+ ** Reducers are defined as separate named functions for two main reasons:
+ ** 1. to aid unit testing; and
+ ** 2. to improve the legibility of `initializeMachine`.
+ */
+
+function activateReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    active: true
+  };
+}
+
+function incrementReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    count: ctx.count + 1
+  };
+}
+
+function decrementReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    count: ctx.count - 1
+  };
+}
+
+function deactivateReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    active: false
+  };
+}
+
+function resetReducer(ctx: Context): Context {
+  return {
+    ...ctx,
+    count: 0
+  };
+}
+
+export {
+  initializeMachine,
+  activateReducer,
+  incrementReducer,
+  decrementReducer,
+  resetReducer
+};
+
 export type { Context, Config };

@@ -1,3 +1,14 @@
+/**
+ * Example pattern for a component controlled by Manager.
+ * 
+ * In lieu of using internal reactive properties our component state is managed
+ * by a Robot finite state machine (FSM).
+ * 
+ * The machine state is exposed as a read-only property of the Manager, and
+ * changes to it will trigger component updates.
+ * 
+ * State may be changed by sending Robot `SendEvent`s to the Manager.
+ */
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { initializeMachine } from "./example.machine.js";
@@ -15,13 +26,13 @@ class ExampleComponent extends LitElement {
   private manager = new Manager<Context>(
     this,
     initializeMachine(
-      // Configuration values which are immutable wrt the state machine.
+      // Read-only configuration object.
       Object.defineProperties(Object(), {
         max: { get: () => this.max },
         min: { get: () => this.min }
       })
     ),
-    // Initial state object.
+    // Initial state ("context") object.
     {
       count: 0,
       active: false
