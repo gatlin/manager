@@ -4,10 +4,11 @@
  * In lieu of using internal reactive properties our component state is managed
  * by a Robot finite state machine (FSM).
  * 
- * The machine state is exposed as a read-only property of the Manager, and
- * changes to it will trigger component updates.
+ * The machine state is exposed as a read-only property of the Manager,
+ * `context`, and changes to it will trigger component updates.
  * 
- * State may be changed by sending Robot `SendEvent`s to the Manager.
+ * State may be changed by sending Robot `SendEvent`s to Manager's
+ * `next` method.
  */
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
