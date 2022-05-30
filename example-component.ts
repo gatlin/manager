@@ -28,9 +28,9 @@ class ExampleComponent extends LitElement {
     this,
     initializeMachine(
       // Read-only configuration object.
-      Object.defineProperties(Object(), {
-        max: { get: () => this.max },
-        min: { get: () => this.min }
+      Object.defineProperties(Object.create(null), {
+        max: { get: () => this.max, enumerable: true },
+        min: { get: () => this.min, enumerable: true }
       })
     ),
     // Initial state ("context") object.
