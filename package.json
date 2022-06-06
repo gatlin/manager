@@ -1,6 +1,6 @@
 {
   "name": "lit-robot-manager",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "control lit components with robot state machines",
   "author": "gatlin@niltag.net",
   "license": "AGPL-3.0",
@@ -21,7 +21,7 @@
   "dependencies": {
     "lit": "^2.2.4",
     "robot3": "^0.2.21",
-    "torc": "github:gatlin/torc#6718186",
+    "torc": "github:gatlin/torc#55e860f7d9dc90268e84ef27e5d62fcc08c9efbb",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
