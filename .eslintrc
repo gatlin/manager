@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettierx"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "ignorePatterns": ["dist/**/*", "**/*.test.ts", "example.ts"],
   "extends": [
     "eslint:recommended",

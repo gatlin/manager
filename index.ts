@@ -30,7 +30,7 @@ class Manager<TContext> implements ReactiveController, Continuation<SendEvent> {
         (newService: Service<Machine>) => {
           this.service$.next(newService);
         },
-        initialContext
+        initialContext as Machine["context"]
       )
     );
   }
@@ -64,8 +64,7 @@ class Manager<TContext> implements ReactiveController, Continuation<SendEvent> {
           child: Service<Machine>;
         } & Service<Machine>
       ).child.send(event);
-    }
-    else {
+    } else {
       this.service$.value.send(event);
     }
   }

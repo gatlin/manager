@@ -1,12 +1,12 @@
 /**
  * Example pattern for a component controlled by Manager.
- * 
+ *
  * In lieu of using internal reactive properties our component state is managed
  * by a Robot finite state machine (FSM).
- * 
+ *
  * The machine state is exposed as a read-only property of the Manager,
  * `context`, and changes to it will trigger component updates.
- * 
+ *
  * State may be changed by sending Robot `SendEvent`s to Manager's
  * `next` method.
  */
@@ -62,8 +62,7 @@ class ExampleComponent extends LitElement {
           De-activate
         </button>
       `;
-    }
-    else {
+    } else {
       return html`
         <button type="button" @click=${() => this.manager.next("activate")}>
           Press to activate
