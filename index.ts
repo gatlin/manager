@@ -3,20 +3,20 @@ import {
   ReactiveControllerHost
 } from "@lit/reactive-element";
 import { interpret } from "robot3";
-import { Signal } from "torc";
-import type { Continuation } from "torc";
+import { Behavior } from "torc";
+import type { Observer } from "torc";
 import type { SendEvent, Service, Machine } from "robot3";
 
 /**
  * Manages a LitElement component with a robot
  * @typeParam TContext - Type of the state object managed by the machine.
  */
-class Manager<TContext> implements ReactiveController, Continuation<SendEvent> {
+class Manager<TContext> implements ReactiveController, Observer<SendEvent> {
   /**
    * A reactive, dynamically-updated reference to the executing robot state
    * machine service.
    */
-  protected readonly service$: Signal<Service<Machine>>;
+  protected readonly service$: Behavior<Service<Machine>>;
 
   constructor(
     private host: ReactiveControllerHost,
@@ -24,7 +24,7 @@ class Manager<TContext> implements ReactiveController, Continuation<SendEvent> {
     initialContext?: TContext
   ) {
     this.host.addController(this);
-    this.service$ = new Signal(
+    this.service$ = new Behavior(
       interpret(
         machine,
         (newService: Service<Machine>) => {

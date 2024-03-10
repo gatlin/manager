@@ -9,18 +9,18 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "importHelpers": true,
     "outDir": "./dist",
     "sourceMap": true,
     "inlineSources": true,
-    "rootDir": "./",
     "declaration": true,
     "incremental": true,
-    "baseUrl": "."
+    "baseUrl": "./"
   },
   "include": [ "index.ts", "example-component.ts" ],
   "exclude": [
-    "./dist/**/*",
-    "./node_modules/**/*"
+    "./node_modules/**/*",
+    "./dist/**/*"
   ]
 }
